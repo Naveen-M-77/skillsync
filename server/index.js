@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
+import { protect } from './middleware/authMiddleware.js';
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -28,6 +29,13 @@ app.get('/info', (req, res) => {
     })
 })
 
+app.get('/api/protected', protect, (req, res) => {
+  res.json({
+    name: req.user.name,
+    email: req.user.email,
+    role: req.user.role
+  });
+});
 
 
 app.listen(port, () => {
